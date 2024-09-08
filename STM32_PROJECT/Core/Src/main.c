@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "exercise1.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,7 +31,41 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+int led_status = LED_OFF;
 
+void init_exercise1(){
+	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,RESET);
+	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,RESET);
+
+	HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+	HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+}
+void led_on(){
+	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_SET);
+}
+void led_off(){
+	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_RESET);
+}
+void exercise1_run(){
+	switch(led_status){
+		case LED_ON:
+			led_on();
+			if(1){
+				led_status = LED_OFF;
+			}
+			break;
+		case LED_OFF:
+			led_off();
+			if(1){
+				led_status = LED_ON;
+			}
+			break;
+		default:
+			break;
+	}
+}
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -87,7 +121,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+  init_exercise1();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -97,6 +131,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	 exercise1_run();
+	 HAL_Delay(2000);
   }
   /* USER CODE END 3 */
 }
