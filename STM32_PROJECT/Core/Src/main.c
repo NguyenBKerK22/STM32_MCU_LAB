@@ -17,7 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "ex2.h"
+#include <ex3.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -54,25 +54,97 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int count = 5;
-void init_exercise2(){
-	HAL_GPIO_WritePin(LED_RED_GPIO_Port,LED_RED_Pin,SET);
-	HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port,LED_YELLOW_Pin,SET);
+int stateOfGroup1 = RED;
+int countOfGroup1 = 5;
+int stateOfGroup2 = GREEN;
+int countOfGroup2 = 3;
+void init_exercise3(){
+	HAL_GPIO_WritePin(LED_1_GPIO_Port,LED_1_Pin,SET);
+	HAL_GPIO_WritePin(LED_2_GPIO_Port,LED_2_Pin,SET);
+	HAL_GPIO_WritePin(LED_3_GPIO_Port,LED_3_Pin,SET);
+	HAL_GPIO_WritePin(LED_4_GPIO_Port,LED_4_Pin,SET);
+	HAL_GPIO_WritePin(LED_5_GPIO_Port,LED_5_Pin,SET);
+	HAL_GPIO_WritePin(LED_6_GPIO_Port,LED_6_Pin,SET);
 
-	HAL_GPIO_TogglePin(LED_RED_GPIO_Port,LED_RED_Pin);
-	HAL_GPIO_TogglePin(LED_YELLOW_GPIO_Port,LED_YELLOW_Pin);
+	HAL_GPIO_TogglePin(LED_1_GPIO_Port,LED_1_Pin);
+	HAL_GPIO_TogglePin(LED_2_GPIO_Port,LED_2_Pin);
+	HAL_GPIO_TogglePin(LED_3_GPIO_Port,LED_3_Pin);
+	HAL_GPIO_TogglePin(LED_4_GPIO_Port,LED_4_Pin);
+	HAL_GPIO_TogglePin(LED_5_GPIO_Port,LED_5_Pin);
+	HAL_GPIO_TogglePin(LED_6_GPIO_Port,LED_6_Pin);
+
 }
-void exercise2_run(){
-	if(count >3 ){
-		HAL_GPIO_WritePin(LED_RED_GPIO_Port,LED_RED_Pin,RESET);
-		HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port,LED_YELLOW_Pin,SET);
-	}
-	else{
-		HAL_GPIO_WritePin(LED_RED_GPIO_Port,LED_RED_Pin,SET);
-		HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port,LED_YELLOW_Pin,RESET);
-	}
-	count--;
-	if(count == 0) count = 5;
+void traffic1_run(){
+		countOfGroup1--;
+		switch(stateOfGroup1){
+		case RED:
+			if(countOfGroup1 == 0){
+				stateOfGroup1 = GREEN;
+				countOfGroup1 = 3;
+			}
+			HAL_GPIO_WritePin(LED_1_GPIO_Port,LED_1_Pin,SET);
+			HAL_GPIO_WritePin(LED_2_GPIO_Port,LED_2_Pin,RESET);
+			HAL_GPIO_WritePin(LED_3_GPIO_Port,LED_3_Pin,RESET);
+			break;
+		case YELLOW:
+			if(countOfGroup1 == 0){
+				stateOfGroup1 = RED;
+				countOfGroup1 = 5;
+			}
+			HAL_GPIO_WritePin(LED_1_GPIO_Port,LED_1_Pin,RESET);
+			HAL_GPIO_WritePin(LED_2_GPIO_Port,LED_2_Pin,SET);
+			HAL_GPIO_WritePin(LED_3_GPIO_Port,LED_3_Pin,RESET);
+			break;
+		case GREEN:
+			if(countOfGroup1 == 0){
+				stateOfGroup1 = YELLOW;
+				countOfGroup1 = 2;
+			}
+			HAL_GPIO_WritePin(LED_1_GPIO_Port,LED_1_Pin,RESET);
+			HAL_GPIO_WritePin(LED_2_GPIO_Port,LED_2_Pin,RESET);
+			HAL_GPIO_WritePin(LED_3_GPIO_Port,LED_3_Pin,SET);
+			break;
+		default:
+			break;
+		}
+}
+void traffic2_run(){
+		countOfGroup2--;
+		switch(stateOfGroup2){
+		case RED:
+			if(countOfGroup2 == 0){
+					stateOfGroup2 = GREEN;
+					countOfGroup2 = 3;
+				}
+				HAL_GPIO_WritePin(LED_4_GPIO_Port,LED_4_Pin,SET);
+				HAL_GPIO_WritePin(LED_5_GPIO_Port,LED_5_Pin,RESET);
+				HAL_GPIO_WritePin(LED_6_GPIO_Port,LED_6_Pin,RESET);
+				break;
+			case YELLOW:
+				if(countOfGroup2 == 0){
+					stateOfGroup2 = RED;
+					countOfGroup2 = 5;
+				}
+				HAL_GPIO_WritePin(LED_4_GPIO_Port,LED_4_Pin,RESET);
+				HAL_GPIO_WritePin(LED_5_GPIO_Port,LED_5_Pin,SET);
+				HAL_GPIO_WritePin(LED_6_GPIO_Port,LED_6_Pin,RESET);
+				break;
+			case GREEN:
+				if(countOfGroup1 == 0){
+					stateOfGroup2 = YELLOW;
+					countOfGroup2 = 2;
+				}
+				HAL_GPIO_WritePin(LED_4_GPIO_Port,LED_4_Pin,RESET);
+				HAL_GPIO_WritePin(LED_5_GPIO_Port,LED_5_Pin,RESET);
+				HAL_GPIO_WritePin(LED_6_GPIO_Port,LED_6_Pin,SET);
+				break;
+			default:
+				break;
+			}
+}
+void exercise3_run(){
+	traffic1_run();
+	traffic2_run();
 }
 /* USER CODE END 0 */
 
@@ -106,7 +178,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  init_exercise2();
+  init_exercise3();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -114,8 +186,9 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  exercise2_run();
     /* USER CODE BEGIN 3 */
+	  exercise3_run();
+	  HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
