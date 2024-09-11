@@ -52,6 +52,9 @@ default.size.stdout \
 OBJDUMP_LIST += \
 STM32_PROJECT.list \
 
+OBJCOPY_HEX += \
+STM32_PROJECT.hex \
+
 
 # All Target
 all: main-build
@@ -60,8 +63,8 @@ all: main-build
 main-build: STM32_PROJECT.elf secondary-outputs
 
 # Tool invocations
-STM32_PROJECT.elf STM32_PROJECT.map: $(OBJS) $(USER_OBJS) D:\STM32_MCU_LAB\STM32_MCU_LAB\STM32_PROJECT\STM32F103C6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STM32_PROJECT.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\STM32_MCU_LAB\STM32_MCU_LAB\STM32_PROJECT\STM32F103C6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32_PROJECT.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+STM32_PROJECT.elf STM32_PROJECT.map: $(OBJS) $(USER_OBJS) D:\New\ folder\STM32_MCU_LAB\STM32_PROJECT\STM32F103C6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "STM32_PROJECT.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\New folder\STM32_MCU_LAB\STM32_PROJECT\STM32F103C6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32_PROJECT.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -75,12 +78,17 @@ STM32_PROJECT.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+STM32_PROJECT.hex: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "STM32_PROJECT.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) STM32_PROJECT.elf STM32_PROJECT.list STM32_PROJECT.map default.size.stdout
+	-$(RM) STM32_PROJECT.elf STM32_PROJECT.hex STM32_PROJECT.list STM32_PROJECT.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
